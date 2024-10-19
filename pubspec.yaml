@@ -1,0 +1,40 @@
+name: ecommerce_api
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.4.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  dio: ^5.4.0
+  sqflite: ^2.2.6
+  shared_preferences: ^2.2.2
+  cupertino_icons: ^1.0.2
+  path_provider: ^2.0.14
+  path: ^1.8.2
+  image_picker: ^1.1.2
+  intl: ^0.19.0
+  file_picker: ^8.0.6
+  youtube_player_flutter: ^8.0.0
+  url_launcher: ^6.0.9
+  provider: ^6.0.0
+  table_calendar: ^3.0.0
+  flutter_colorpicker: ^1.0.3
+  fl_chart: ^0.69.0  # Hạ xuống phiên bản ổn định hơn
+  timezone: ^0.9.4
+  flutter_local_notifications: ^17.2.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/google.png
+    - assets/facebook.png

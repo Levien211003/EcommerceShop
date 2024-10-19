@@ -1,16 +1,16 @@
 class Product {
-  int productId;
+  int? productID; // Chuyển sang nullable
   String name;
   String description;
   double price;
   String category;
-  int stock;
+  int? stock; // Chuyển sang nullable
   String imageUrl;
   DateTime createdAt;
   DateTime updatedAt;
 
   Product({
-    required this.productId,
+    required this.productID,
     required this.name,
     required this.description,
     required this.price,
@@ -21,33 +21,33 @@ class Product {
     required this.updatedAt,
   });
 
-  // Chuyển từ JSON sang đối tượng Product
   factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      productId: json['ProductID'],
-      name: json['Name'],
-      description: json['Description'],
-      price: (json['Price'] as num).toDouble(),
-      category: json['Category'],
-      stock: json['Stock'],
-      imageUrl: json['ImageUrl'],
-      createdAt: DateTime.parse(json['CreatedAt']),
-      updatedAt: DateTime.parse(json['UpdatedAt']),
-    );
-  }
+  return Product(
+    productID: json['productID'] as int, // Kiểm tra kiểu dữ liệu
+    name: json['name'] as String,
+    description: json['description'] as String,
+    price: (json['price'] as num).toDouble(), // Chuyển đổi từ decimal
+    category: json['category'] as String,
+    stock: json['stock'] != null ? (json['stock'] as int) : 0, // Kiểm tra null
+    imageUrl: json['imageUrl'] as String,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    updatedAt: DateTime.parse(json['updatedAt'] as String),
+  );
+}
+
 
   // Chuyển từ đối tượng Product sang JSON
   Map<String, dynamic> toJson() {
     return {
-      'ProductID': productId,
-      'Name': name,
-      'Description': description,
-      'Price': price,
-      'Category': category,
-      'Stock': stock,
-      'ImageUrl': imageUrl,
-      'CreatedAt': createdAt.toIso8601String(),
-      'UpdatedAt': updatedAt.toIso8601String(),
+      'productID': productID,
+      'name': name,
+      'description': description,
+      'price': price,
+      'category': category,
+      'stock': stock,
+      'imageUrl': imageUrl,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }

@@ -38,3 +38,5 @@ flutter:
   assets:
     - assets/google.png
     - assets/facebook.png
+    - assets/banner.png
+    - assets/products/

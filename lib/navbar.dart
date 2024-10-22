@@ -3,7 +3,7 @@ import 'home_screen.dart';
 import 'shop_screen.dart';
 import 'bag_screen.dart';
 import 'favorite_screen.dart';
-import 'profile_screen.dart';
+import 'profile/profile_screen.dart';
 
 
 class Navbar extends StatefulWidget {

@@ -10,13 +10,18 @@ class _BagScreenState extends State<BagScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Setting'),
-        backgroundColor: Colors.green, // Màu của AppBar
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
       ),
-      // appBar: AppBar(
-      //   title: Text('Setting'),
-      //   backgroundColor: Colors.green, // Màu của AppBar
-      // ),
       body: Center(
         child: Text('Welcome to the Bag Screen'),
       ),

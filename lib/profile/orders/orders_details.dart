@@ -10,7 +10,7 @@ class OrderDetailsScreen extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -49,9 +49,9 @@ class OrderDetailsScreen extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             SizedBox(height: 8),
-            _buildOrderItem('Pullover', 'Mango', 'Gray', 'L', '51\$', 'assets/item1.png'),
-            _buildOrderItem('Pullover', 'Mango', 'Gray', 'L', '51\$', 'assets/item2.png'),
-            _buildOrderItem('Pullover', 'Mango', 'Gray', 'L', '51\$', 'assets/item3.png'),
+            _buildOrderItem('Pullover', 'Mango', 'Gray', 'L', '51\$', 'assets/Female/Female4.png'),
+            _buildOrderItem('Pullover', 'Mango', 'Gray', 'L', '51\$', 'assets/Female/Female4.png'),
+            _buildOrderItem('Pullover', 'Mango', 'Gray', 'L', '51\$', 'assets/Female/Female4.png'),
             SizedBox(height: 16),
 
             // Order information
@@ -124,24 +124,33 @@ class OrderDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderInfoRow(String title, String info, {IconData? icon}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          if (icon != null)
-            Icon(icon, color: Colors.red, size: 20),
-          if (icon != null)
-            SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              title,
-              style: TextStyle(color: Colors.grey),
-            ),
+ Widget _buildOrderInfoRow(String title, String info, {IconData? icon}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start, // Căn chỉnh các widget bên trên
+      children: [
+        if (icon != null)
+          Icon(icon, color: Colors.red, size: 20),
+        if (icon != null) SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            '$title:', // Thêm dấu ":" sau tiêu đề
+            style: TextStyle(color: Colors.grey),
           ),
-          Text(info, style: TextStyle(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
+        ),
+        Expanded(
+          child: Text(
+            info,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start, // Căn trái cho thông tin
+            maxLines: 2, // Giới hạn số dòng nếu muốn
+            overflow: TextOverflow.visible, // Không cắt bớt
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 }

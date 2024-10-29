@@ -87,7 +87,9 @@ class AuthService {
           return response.body;
         }
       } else {
-        return 'Đăng nhập thất bại với mã lỗi: ${response.statusCode}, chi tiết: ${response.body}';
+        // return 'Đăng nhập thất bại : ${response.statusCode}, chi tiết: ${response.body}';
+                return 'Đăng nhập thất bại :${response.body}';
+
       }
     } catch (e) {
       return 'Lỗi khi kết nối đến server: $e';

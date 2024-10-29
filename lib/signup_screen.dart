@@ -16,10 +16,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final AuthService _authService = AuthService();
   bool _isLoading = false;
 
-  // Hàm xử lý khi người dùng nhấn vào nút SIGN UP
+  // Error messages for validation
+  String? _fullNameError;
+  String? _phoneNumberError;
+  String? _emailError;
+  String? _usernameError;
+  String? _passwordError;
+
+  bool _hasInteractedFullName = false;
+  bool _hasInteractedPhoneNumber = false;
+  bool _hasInteractedEmail = false;
+  bool _hasInteractedUsername = false;
+  bool _hasInteractedPassword = false;
+
   Future<void> _handleSignUp() async {
     setState(() {
       _isLoading = true;
+      _fullNameError = null;
+      _phoneNumberError = null;
+      _emailError = null;
+      _usernameError = null;
+      _passwordError = null;
     });
 
     String fullName = _fullNameController.text.trim();
@@ -28,15 +45,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
 
-    if (fullName.isEmpty || phoneNumber.isEmpty || email.isEmpty || username.isEmpty || password.isEmpty) {
-      setState(() {
-        _isLoading = false;
-      });
-      _showErrorDialog('Please fill in all the fields.');
-      return;
+    bool isValid = true;
+
+    // Full Name Validation
+    if (fullName.isEmpty) {
+      _fullNameError = 'Full Name is required.';
+      isValid = false;
     }
 
-    // Gọi hàm register từ AuthService
+    // Phone Number Validation
+    if (phoneNumber.isEmpty) {
+      _phoneNumberError = 'Phone Number is required.';
+      isValid = false;
+    } else if (!RegExp(r'^0\d{9}$').hasMatch(phoneNumber)) {
+      _phoneNumberError = 'Phone Number must be 10 digits and start with 0.';
+      isValid = false;
+    }
+
+    // Email Validation
+    if (email.isEmpty) {
+      _emailError = 'Email is required.';
+      isValid = false;
+    } else if (!RegExp(r'^[\w-]+@gmail\.com$').hasMatch(email)) {
+      _emailError = 'Email must be a valid @gmail.com address.';
+      isValid = false;
+    }
+
+    // Username Validation
+    if (username.isEmpty) {
+      _usernameError = 'Username is required.';
+      isValid = false;
+    }
+
+    // Password Validation
+    if (password.isEmpty) {
+      _passwordError = 'Password is required.';
+      isValid = false;
+    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$').hasMatch(password)) {
+      _passwordError = 'Password must contain an uppercase letter and a special character.';
+      isValid = false;
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!isValid) return;
+
     String result = await _authService.register(
       username: username,
       email: email,
@@ -45,22 +100,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
       phoneNumber: phoneNumber,
     );
 
-    setState(() {
-      _isLoading = false;
-    });
-
     if (result == 'Đăng ký thành công') {
-      // Điều hướng sang màn hình đăng nhập sau khi đăng ký thành công
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SignInScreen()),
       );
     } else {
-      _showErrorDialog(result); // Hiển thị thông báo lỗi
+      _showErrorDialog(result);
     }
   }
 
-  // Hiển thị hộp thoại lỗi
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -79,6 +128,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String? errorText,
+    required bool hasInteracted,
+    required Function(String) onChanged,
+      bool obscureText = false, // Thêm tham số này
+
+  }) {
+    return TextField(
+      controller: controller,
+      onChanged: (value) {
+        setState(() {
+          onChanged(value);
+        });
+      },
+          obscureText: obscureText, // Thêm thuộc tính này để ẩn ký tự
+
+      decoration: InputDecoration(
+        labelText: label,
+        errorText: errorText,
+        suffixIcon: Icon(
+          errorText != null
+              ? Icons.cancel
+              : (controller.text.isNotEmpty
+                  ? Icons.check_circle_outline
+                  : Icons.circle_outlined),
+          color: errorText != null
+              ? Colors.red
+              : (controller.text.isNotEmpty
+                  ? Colors.green
+                  : Colors.grey),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,87 +178,101 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
+            
                 SizedBox(height: 16.0),
                 Text(
-                  'Sign up',
+                  'Đăng Ký',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(height: 32.0),
-                TextField(
+                _buildTextField(
                   controller: _fullNameController,
-                  decoration: InputDecoration(
-                    labelText: 'FullName',
-                    suffixIcon: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  label: 'Full Name',
+                  errorText: _fullNameError,
+                  hasInteracted: _hasInteractedFullName,
+                  onChanged: (value) {
+                    _hasInteractedFullName = true;
+                    if (value.isEmpty) {
+                      _fullNameError = 'Full Name không được bỏ trống.';
+                    } else {
+                      _fullNameError = null;
+                    }
+                  },
                 ),
                 SizedBox(height: 16.0),
-                TextField(
+                _buildTextField(
                   controller: _phoneNumberController,
-                  decoration: InputDecoration(
-                    labelText: 'PhoneNumber',
-                    suffixIcon: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  label: 'Số Điện Thoại',
+                  errorText: _phoneNumberError,
+                  hasInteracted: _hasInteractedPhoneNumber,
+                  onChanged: (value) {
+                    _hasInteractedPhoneNumber = true;
+                    if (value.isEmpty) {
+                      _phoneNumberError = 'Số Điện Thoại không được bỏ trống.';
+                    } else if (!RegExp(r'^0\d{9}$').hasMatch(value)) {
+                      _phoneNumberError =
+                          'Số Điện Thoại không hợp lệ.';
+                    } else {
+                      _phoneNumberError = null;
+                    }
+                  },
                 ),
                 SizedBox(height: 16.0),
-                TextField(
+                _buildTextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    suffixIcon: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  label: 'Email',
+                  errorText: _emailError,
+                  hasInteracted: _hasInteractedEmail,
+                  onChanged: (value) {
+                    _hasInteractedEmail = true;
+                    if (value.isEmpty) {
+                      _emailError = 'Email không được bỏ trống.';
+                    } else if (!RegExp(r'^[\w-]+@gmail\.com$')
+                        .hasMatch(value)) {
+                      _emailError = 'Email phải có @gmail.com.';
+                    } else {
+                      _emailError = null;
+                    }
+                  },
                 ),
                 SizedBox(height: 16.0),
-                TextField(
+                _buildTextField(
                   controller: _usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'UserName',
-                    suffixIcon: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.grey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  label: 'Tài Khoản',
+                  errorText: _usernameError,
+                  hasInteracted: _hasInteractedUsername,
+                  onChanged: (value) {
+                    _hasInteractedUsername = true;
+                    if (value.isEmpty) {
+                      _usernameError = 'Tài Khoản không được bỏ trống.';
+                    } else {
+                      _usernameError = null;
+                    }
+                  },
                 ),
                 SizedBox(height: 16.0),
-                TextField(
+                _buildTextField(
                   controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                  label: 'Password',
+                  errorText: _passwordError,
+                  hasInteracted: _hasInteractedPassword,
+                  onChanged: (value) {
+                    _hasInteractedPassword = true;
+                    if (value.isEmpty) {
+                      _passwordError = 'Password không được bỏ trống.';
+                    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$').hasMatch(value)) {
+                      _passwordError = 'Mật Khẩu phải có từ in hoa và kí tự đặc biệt.';
+                    } else {
+                      _passwordError = null;
+                    }
+                  },
+                    obscureText: true, // Đảm bảo ẩn ký tự
+
                 ),
+             
                 SizedBox(height: 16.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -181,16 +284,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           MaterialPageRoute(builder: (context) => SignInScreen()),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Text("Already have an account?"),
-                          SizedBox(width: 4.0),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.red,
-                          ),
-                        ],
-                      ),
+                     child: Row(
+  children: [
+    Text(
+      "Already have an account?",
+      style: TextStyle(
+        color: Colors.pink, 
+      ),
+    ),
+    SizedBox(width: 4.0),
+    Icon(
+      Icons.arrow_forward,
+      color: Colors.red,
+    ),
+  ],
+),
+
                     ),
                   ],
                 ),
@@ -204,7 +313,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ? CircularProgressIndicator(
                       color: Colors.white,
                     )
-                        : Text('SIGN UP'),
+                        : Text('ĐĂNG KÝ'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
@@ -213,11 +322,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 32.0),
+                SizedBox(height:32.0),
                 Center(
                   child: Column(
                     children: [
-                      Text('Or sign up with social account'),
+                      Text('Hoặc đăng nhập bằng tài khoản xã hội'),
                       SizedBox(height: 16.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -254,15 +363,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _fullNameController.dispose();
-    _phoneNumberController.dispose();
-    _emailController.dispose();
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ecommerce_api/profile/orders/orders_details.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   @override
@@ -134,10 +135,16 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              OutlinedButton(
-                onPressed: () {},
-                child: Text('Details'),
-              ),
+             OutlinedButton(
+              onPressed: () {
+                // Điều hướng đến OrderDetailsScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderDetailsScreen()),
+                );
+              },
+              child: Text('Details'),
+            ),
               Text(
                 'Delivered',
                 style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),

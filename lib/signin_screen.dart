@@ -92,12 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
+                
                 SizedBox(height: 16.0),
                 Text(
                   'Đăng Nhập',
@@ -138,13 +133,20 @@ class _SignInScreenState extends State<SignInScreen> {
                           MaterialPageRoute(builder: (context) => SignUpScreen()),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Text("Bạn chưa có tài khoản? Đăng ký"),
-                          SizedBox(width: 4.0),
-                          Icon(Icons.arrow_forward, color: Colors.red),
-                        ],
-                      ),
+                     child: Row(
+  children: [
+    Text(
+      "Bạn chưa có tài khoản? Đăng ký",
+      style: TextStyle(
+        color: Colors.pink,
+     
+      ),
+    ),
+    SizedBox(width: 4.0),
+    Icon(Icons.arrow_forward, color: Colors.red),
+  ],
+),
+
                     ),
                   ],
                 ),

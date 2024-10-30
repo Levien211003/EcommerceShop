@@ -4,7 +4,8 @@ import 'package:ecommerce_api/model/product.dart';
 import 'package:intl/intl.dart'; // Import thư viện
 import 'new_page.dart';
 import 'sale_page.dart';
-import 'dart:async'; // Thêm import cho Timer
+import 'dart:async'; 
+import 'product_details.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<Product>>? futureRecentProducts;
   Future<List<Product>>? futureSaleProducts;
 
-  int currentBannerIndex = 0; // Chỉ số banner hiện tại
+  int currentBannerIndex = 0;
   late Timer bannerTimer; // Timer để thay đổi banner
   final List<String> banners = [ // Danh sách các banner
     'assets/banner.png',
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Image.asset(
                   banners[currentBannerIndex], // Sử dụng banner theo chỉ số hiện tại
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.width * (1.425), // Tỉ lệ 2x8
+                  height: MediaQuery.of(context).size.width * (1.15), 
                   fit: BoxFit.cover,
                 ),
                Positioned(
@@ -95,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewPage()), // Khi banner 2
+             MaterialPageRoute(builder: (context) => NewPage()), // Khi banner 2
             );
           }
         },
@@ -130,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'Sale',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 34,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -174,7 +175,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         bool hasDiscount = product.salePrice != null &&
                             product.salePrice! < product.price;
 
-                        return Container(
+                        return GestureDetector( // Thêm GestureDetector
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailScreen(), // Điều hướng đến ProductDetailScreen
+                            ),
+                          );
+                        },
+                        child:   Container(
                           width: 160,
                           margin: EdgeInsets.only(right: 16.0),
                           decoration: BoxDecoration(
@@ -264,7 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                             ],
                           ),
+                        ),
                         );
+                      
                       },
                     ),
                   ),
@@ -282,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'New',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 34,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -320,7 +332,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: products.length,
                       itemBuilder: (context, index) {
                         Product product = products[index];
-                        return Container(
+                        return GestureDetector( // Thêm GestureDetector
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailScreen(), // Điều hướng đến ProductDetailScreen
+                            ),
+                          );
+                        },
+                        child: Container(
                           width: 160,
                           margin: EdgeInsets.only(right: 16.0),
                           decoration: BoxDecoration(
@@ -371,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                        );
+                        ),);
                       },
                     ),
                   ),

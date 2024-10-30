@@ -109,7 +109,7 @@ Future<List<Product>> getRecentProducts() async {
           description: product['description'],
           price: product['price'], // Giá gốc
           salePrice: product['salePrice'], // Giá sau khi giảm (salePrice)
-          category: product['category'],
+          idCategory: product['idcategory'],
           stock: product['stock'],
           imageUrl: product['imageUrl'],
           createdAt: DateTime.parse(product['createdAt']),

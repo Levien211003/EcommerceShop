@@ -4,8 +4,9 @@ class Product {
   String description;
   double price;
   double? salePrice; // Nullable vì có thể không phải tất cả sản phẩm đều có giảm giá
-  String category;
   int? stock; // Nullable
+  int? idCategory; // Nullable
+
   String imageUrl;
   DateTime createdAt;
   DateTime updatedAt;
@@ -20,7 +21,7 @@ class Product {
     required this.description,
     required this.price,
     required this.salePrice, // Có thể null nếu không có giảm giá
-    required this.category,
+    required this.idCategory,
     required this.stock,
     required this.imageUrl,
     required this.createdAt,
@@ -48,7 +49,7 @@ class Product {
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),
       salePrice: null, // Ban đầu chưa tính salePrice
-      category: json['category'] as String,
+      idCategory: json['idcategory'] as int?,
       stock: json['stock'] != null ? (json['stock'] as int) : null,
       imageUrl: json['imageUrl'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -75,7 +76,7 @@ class Product {
       'description': description,
       'price': price,
       'salePrice': salePrice, // Bao gồm salePrice
-      'category': category,
+      'idcategory': idCategory,
       'stock': stock,
       'imageUrl': imageUrl,
       'createdAt': createdAt.toIso8601String(),

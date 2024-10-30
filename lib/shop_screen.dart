@@ -27,12 +27,11 @@ class _ShopScreenState extends State<ShopScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 4,
-        shadowColor: Colors.grey.withOpacity(0.2),
+        // shadowColor: Colors.grey.withOpacity(0.2),
         leading: SizedBox.shrink(),
-        title: Text(
-          'Categories',
-          style: TextStyle(color: Colors.black),
-        ),
+        title:             
+              Text("Categories", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+
         centerTitle: true,
         actions: [
           IconButton(
@@ -102,7 +101,6 @@ class _ShopScreenState extends State<ShopScreen> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    // Danh sách các danh mục (New, Clothes, Shoes, Accessories)
                     buildCategoryItem('New', 'assets/Female/Female1.png', itemHeight),
                     buildCategoryItem('Clothes', 'assets/Female/Female2.png', itemHeight),
                     buildCategoryItem('Shoes', 'assets/Female/Female3.png', itemHeight),

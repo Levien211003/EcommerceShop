@@ -5,7 +5,6 @@ import 'bag_screen.dart';
 import 'favorite_screen.dart';
 import 'profile/profile_screen.dart';
 
-
 class Navbar extends StatefulWidget {
   final int userId; // Thêm tham số userId
 
@@ -16,29 +15,20 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  int navBarIndex = 0;
-  bool isDarkMode = false; // Trạng thái dark mode ban đầu
+  int navBarIndex = 0; // Chỉ số của navBar hiện tại
 
   void _onItemTapped(int index) {
     setState(() {
-      navBarIndex = index;
+      navBarIndex = index; // Cập nhật chỉ số navBar
     });
   }
-
-  void _toggleDarkMode(bool value) {
-    setState(() {
-      isDarkMode = value; // Cập nhật trạng thái dark mode
-    });
-  }
-
 
   List<Widget> get _screens => [
     HomeScreen(),
     ShopScreen(),
-    BagScreen(),
+    MyBagScreen(),
     FavoriteScreen(),
     ProfileScreen(),
-
   ];
 
   @override
@@ -48,32 +38,50 @@ class _NavbarState extends State<Navbar> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: navBarIndex,
-        backgroundColor: Color(0xFF44462E),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white, // Đặt màu nền trong suốt
+        selectedItemColor: Colors.redAccent, // Màu khi chọn
+        unselectedItemColor: Colors.black, // Màu chữ khi không chọn
         onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_sharp),
-            label: 'CShop',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'Bag',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        items: List.generate(5, (index) {
+          IconData icon;
+          String label;
+
+          switch (index) {
+            case 0:
+              icon = Icons.home;
+              label = 'Home';
+              break;
+            case 1:
+              icon = Icons.shopping_cart_sharp;
+              label = 'Shop';
+              break;
+            case 2:
+              icon = Icons.shopping_bag;
+              label = 'Bag';
+              break;
+            case 3:
+              icon = Icons.favorite;
+              label = 'Favorite';
+              break;
+            case 4:
+              icon = Icons.person;
+              label = 'Profile';
+              break;
+            default:
+              icon = Icons.home;
+              label = 'Home';
+          }
+
+          return BottomNavigationBarItem(
+            icon: Icon(
+              icon,
+              color: navBarIndex == index ? Colors.redAccent : Colors.black, // Màu icon theo trạng thái
+            ),
+            label: label,
+            // Màu chữ
+            backgroundColor: Colors.transparent, // Màu nền item trong suốt
+          );
+        }),
       ),
     );
   }

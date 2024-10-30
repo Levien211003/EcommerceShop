@@ -51,7 +51,7 @@ class _SalePageState extends State<SalePage> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Số cột trong grid
-                childAspectRatio: 0.7, // Tỷ lệ chiều rộng/chiều cao của mỗi sản phẩm
+                childAspectRatio: 0.85, // Tỷ lệ chiều rộng/chiều cao của mỗi sản phẩm
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
               ),

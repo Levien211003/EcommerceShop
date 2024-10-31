@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailScreen(), // Điều hướng đến ProductDetailScreen
+                              builder: (context) => ProductDetailScreen(product: product), // Điều hướng đến ProductDetailScreen
                             ),
                           );
                         },
@@ -337,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailScreen(), // Điều hướng đến ProductDetailScreen
+                              builder: (context) => ProductDetailScreen(product: product), // Điều hướng đến ProductDetailScreen
                             ),
                           );
                         },

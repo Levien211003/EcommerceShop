@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ecommerce_api/model/product.dart';
+import 'package:ecommerce_api/model/productvariant.dart';
 
 class ApiService {
   static const String baseUrl = 'http://192.168.1.10:7163/api';
@@ -125,9 +126,55 @@ Future<List<Product>> getRecentProducts() async {
       throw Exception('Lỗi khi lấy sản phẩm đang giảm giá: ${response.body}');
     }
   } catch (e) {
-    print('Caught error: $e'); // Thêm dòng này để in lỗi ra console
+    print('Caught error: $e'); 
     throw Exception('Lỗi kết nối đến server: $e');
   }
 }
+
+///get products by productid
+ Future<Product?> getProductById(int productID) async {
+    final url = Uri.parse('$baseUrl/products/$productID');
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        // Chuyển đổi JSON thành đối tượng Product
+        var jsonData = jsonDecode(response.body);
+        return Product.fromJson(jsonData);
+      } else if (response.statusCode == 404) {
+        // Không tìm thấy sản phẩm
+        return null;
+      } else {
+        throw Exception('Lỗi khi lấy sản phẩm: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Lỗi kết nối đến server: $e');
+    }
+  }
+
+Future<List<ProductVariant>> getProductVariants(int productId) async {
+  final url = Uri.parse('$baseUrl/products/$productId/variants');
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = jsonDecode(response.body);
+      return jsonData.map((variant) {
+        if (variant is! Map<String, dynamic>) {
+          throw Exception('Dữ liệu không hợp lệ: $variant');
+        }
+        return ProductVariant.fromJson(variant);
+      }).toList();
+    } else if (response.statusCode == 404) {
+      return [];
+    } else {
+      throw Exception('Lỗi khi lấy biến thể sản phẩm: ${response.body}');
+    }
+  } catch (e) {
+    throw Exception('Lỗi kết nối đến server: $e');
+  }
+}
+
+
 
   }
